@@ -172,4 +172,24 @@ public class OrderAggregateTest
         //Assert
         Assert.Equal(fakeOrder.DomainEvents.Count, expectedResult);
     }
+    [Fact]
+    public void Set_status_to_completed_when_not_shipped_throws_an_error()
+    {
+        //Arrange    
+        var street = "fakeStreet";
+        var city = "FakeCity";
+        var state = "fakeState";
+        var country = "fakeCountry";
+        var zipcode = "FakeZipCode";
+        var cardTypeId = 5;
+        var cardNumber = "12";
+        var cardSecurityNumber = "123";
+        var cardHolderName = "FakeName";
+        var cardExpiration = DateTime.Now.AddYears(1);
+        var fakeOrder = new Order("1", "fakeName", new Address(street, city, state, country, zipcode), cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration);
+        
+        //Act and  
+        //Assert
+        Assert.Throws<OrderingDomainException>(() => fakeOrder.SetCompleteStatus());
+    }
 }

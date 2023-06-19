@@ -52,6 +52,7 @@ public class Order
         _buyerId = buyerId;
         _paymentMethodId = paymentMethodId;
         _orderStatusId = OrderStatus.Submitted.Id;
+        OrderStatus = OrderStatus.Submitted;
         _orderDate = DateTime.UtcNow;
         Address = address;
 
@@ -141,6 +142,18 @@ public class Order
         _orderStatusId = OrderStatus.Shipped.Id;
         _description = "The order was shipped.";
         AddDomainEvent(new OrderShippedDomainEvent(this));
+    }
+
+    public void SetCompleteStatus()
+    {
+        if (_orderStatusId != OrderStatus.Shipped.Id)
+        {
+            StatusChangeException(OrderStatus.Completed);
+        }
+
+        _orderStatusId = OrderStatus.Completed.Id;
+        _description = "The order was completed.";
+        AddDomainEvent(new OrderCompletedDomainEvent(this));
     }
 
     public void SetCancelledStatus()
